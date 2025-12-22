@@ -31,6 +31,8 @@ void displayPassengerMenu(TicketManager &ticketManager, RouteManager &routeManag
 void displayGraphMenu(RouteManager &routeManager);
 void displayViewMenu(RouteManager &routeManager, TicketManager &ticketManager, VehicleManager &vehicleManager);
 void displayHistoryMenu(HistoryManager &historyManager, RouteManager &routeManager, VehicleManager &vehicleManager);
+void displaySearchSortMenu();
+void displaySearchSortMenu();
 
 int main()
 {
@@ -87,6 +89,9 @@ int main()
             displayHistoryMenu(historyManager, routeManager, vehicleManager);
             break;
         case 8:
+            displaySearchSortMenu();
+            break;
+        case 9:
             cout << "\n======================================================================\n";
             cout << "          Thank you for using ITNMS! Goodbye!\n";
             cout << "======================================================================\n\n";
@@ -110,7 +115,8 @@ void displayMainMenu()
     cout << "5. View System Information\n";
     cout << "6. Graph Algorithms & Analysis\n";
     cout << "7. History & Undo\n";
-    cout << "8. Exit\n";
+    cout << "8. Searching & Sorting Demos\n";
+    cout << "9. Exit\n";
     cout << "===============================\n";
 }
 
@@ -499,7 +505,11 @@ void displayViewMenu(RouteManager &routeManager, TicketManager &ticketManager, V
         cout << "4. Display All Tickets\n";
         cout << "5. Display Passenger Queue\n";
         cout << "6. Show Most Crowded Station (by Tickets)\n";
-        cout << "7. Back to Main Menu\n";
+        cout << "7. Show Busiest Route\n";
+        cout << "8. Fastest Vehicle Assignment\n";
+        cout << "9. Traffic Density Prediction\n";
+        cout << "10. Daily Usage Trends\n";
+        cout << "11. Back to Main Menu\n";
         cout << "============================================\n";
         cout << "Enter choice: ";
         cin >> viewChoice;
@@ -545,6 +555,27 @@ void displayViewMenu(RouteManager &routeManager, TicketManager &ticketManager, V
             }
             break;
         case 7:
+            cout << "\n";
+            routeManager.showBusiestRoute(ticketManager.getAllTickets());
+            break;
+        case 8:
+        {
+            int reqPassengers;
+            cout << "\nEnter required passenger capacity: ";
+            cin >> reqPassengers;
+            cout << "\n";
+            vehicleManager.assignFastestVehicle(reqPassengers);
+            break;
+        }
+        case 9:
+            cout << "\n";
+            routeManager.showTrafficDensity(ticketManager.getAllTickets(), 5);
+            break;
+        case 10:
+            cout << "\n";
+            Analytics::dailyUsageTrends(ticketManager.getAllTickets());
+            break;
+        case 11:
             viewMenuActive = false;
             break;
         default:
@@ -565,7 +596,8 @@ void displayGraphMenu(RouteManager &routeManager)
         cout << "2. DFS Traversal\n";
         cout << "3. Shortest Path (Dijkstra)\n";
         cout << "4. Minimum Spanning Tree (Prim's)\n";
-        cout << "5. Back to Main Menu\n";
+        cout << "5. Detect Cycle in Network\n";
+        cout << "6. Back to Main Menu\n";
         cout << "================================================\n";
         cout << "Enter choice: ";
         cin >> graphChoice;
@@ -639,6 +671,13 @@ void displayGraphMenu(RouteManager &routeManager)
             routeManager.minimumSpanningTree();
             break;
         case 5:
+            cout << "\n";
+            if (routeManager.detectCycle())
+                cout << "Cycle detected in the network!\n";
+            else
+                cout << "No cycle found in the network.\n";
+            break;
+        case 6:
             graphMenuActive = false;
             break;
         default:
@@ -752,6 +791,190 @@ void displayHistoryMenu(HistoryManager &historyManager, RouteManager &routeManag
         case 4:
             historyMenuActive = false;
             break;
+        default:
+            cout << "\nInvalid choice!\n";
+        }
+    }
+}
+
+void displaySearchSortMenu()
+{
+    int choice;
+    bool menuActive = true;
+
+    while (menuActive)
+    {
+        cout << "\n========== SEARCHING & SORTING DEMOS ==========\n";
+        cout << "1. Linear Search Demo\n";
+        cout << "2. Binary Search Demo\n";
+        cout << "3. Bubble Sort Demo\n";
+        cout << "4. Selection Sort Demo\n";
+        cout << "5. Insertion Sort Demo\n";
+        cout << "6. Quick Sort Demo\n";
+        cout << "7. Merge Sort Demo\n";
+        cout << "8. Heap Sort Demo\n";
+        cout << "9. Back to Main Menu\n";
+        cout << "===============================================\n";
+        cout << "Enter choice: ";
+        cin >> choice;
+
+        if (cin.fail())
+        {
+            cin.clear();
+            cin.ignore(10000, '\n');
+            cout << "\nInvalid input! Please enter a number.\n\n";
+            continue;
+        }
+
+        if (choice == 9)
+        {
+            menuActive = false;
+            continue;
+        }
+
+        // Sample array for demonstrations
+        int arr[] = {64, 34, 25, 12, 22, 11, 90, 88, 45, 50, 33, 17};
+        int size = sizeof(arr) / sizeof(arr[0]);
+        int arrCopy[20];
+
+        switch (choice)
+        {
+        case 1:
+        {
+            cout << "\n--- Linear Search Demo ---\n";
+            cout << "Array: ";
+            for (int i = 0; i < size; i++)
+                cout << arr[i] << " ";
+            cout << "\n";
+            int key;
+            cout << "Enter value to search: ";
+            cin >> key;
+            int result = linearSearch(arr, size, key);
+            if (result != -1)
+                cout << "Found at index: " << result << "\n";
+            else
+                cout << "Not found.\n";
+            cout << "Time Complexity: O(n)\n";
+            break;
+        }
+        case 2:
+        {
+            cout << "\n--- Binary Search Demo ---\n";
+            for (int i = 0; i < size; i++)
+                arrCopy[i] = arr[i];
+            // Sort first
+            bubbleSort(arrCopy, size);
+            cout << "Sorted Array: ";
+            for (int i = 0; i < size; i++)
+                cout << arrCopy[i] << " ";
+            cout << "\n";
+            int key;
+            cout << "Enter value to search: ";
+            cin >> key;
+            int result = binarySearch(arrCopy, size, key);
+            if (result != -1)
+                cout << "Found at index: " << result << "\n";
+            else
+                cout << "Not found.\n";
+            cout << "Time Complexity: O(log n)\n";
+            break;
+        }
+        case 3:
+        {
+            cout << "\n--- Bubble Sort Demo ---\n";
+            for (int i = 0; i < size; i++)
+                arrCopy[i] = arr[i];
+            cout << "Before: ";
+            for (int i = 0; i < size; i++)
+                cout << arrCopy[i] << " ";
+            cout << "\n";
+            bubbleSort(arrCopy, size);
+            cout << "After: ";
+            for (int i = 0; i < size; i++)
+                cout << arrCopy[i] << " ";
+            cout << "\nTime Complexity: O(n²)\n";
+            break;
+        }
+        case 4:
+        {
+            cout << "\n--- Selection Sort Demo ---\n";
+            for (int i = 0; i < size; i++)
+                arrCopy[i] = arr[i];
+            cout << "Before: ";
+            for (int i = 0; i < size; i++)
+                cout << arrCopy[i] << " ";
+            cout << "\n";
+            selectionSort(arrCopy, size);
+            cout << "After: ";
+            for (int i = 0; i < size; i++)
+                cout << arrCopy[i] << " ";
+            cout << "\nTime Complexity: O(n²)\n";
+            break;
+        }
+        case 5:
+        {
+            cout << "\n--- Insertion Sort Demo ---\n";
+            for (int i = 0; i < size; i++)
+                arrCopy[i] = arr[i];
+            cout << "Before: ";
+            for (int i = 0; i < size; i++)
+                cout << arrCopy[i] << " ";
+            cout << "\n";
+            insertionSort(arrCopy, size);
+            cout << "After: ";
+            for (int i = 0; i < size; i++)
+                cout << arrCopy[i] << " ";
+            cout << "\nTime Complexity: O(n²)\n";
+            break;
+        }
+        case 6:
+        {
+            cout << "\n--- Quick Sort Demo ---\n";
+            for (int i = 0; i < size; i++)
+                arrCopy[i] = arr[i];
+            cout << "Before: ";
+            for (int i = 0; i < size; i++)
+                cout << arrCopy[i] << " ";
+            cout << "\n";
+            quickSort(arrCopy, 0, size - 1);
+            cout << "After: ";
+            for (int i = 0; i < size; i++)
+                cout << arrCopy[i] << " ";
+            cout << "\nTime Complexity: O(n log n) average\n";
+            break;
+        }
+        case 7:
+        {
+            cout << "\n--- Merge Sort Demo ---\n";
+            for (int i = 0; i < size; i++)
+                arrCopy[i] = arr[i];
+            cout << "Before: ";
+            for (int i = 0; i < size; i++)
+                cout << arrCopy[i] << " ";
+            cout << "\n";
+            mergeSort(arrCopy, 0, size - 1);
+            cout << "After: ";
+            for (int i = 0; i < size; i++)
+                cout << arrCopy[i] << " ";
+            cout << "\nTime Complexity: O(n log n)\n";
+            break;
+        }
+        case 8:
+        {
+            cout << "\n--- Heap Sort Demo ---\n";
+            for (int i = 0; i < size; i++)
+                arrCopy[i] = arr[i];
+            cout << "Before: ";
+            for (int i = 0; i < size; i++)
+                cout << arrCopy[i] << " ";
+            cout << "\n";
+            heapSort(arrCopy, size);
+            cout << "After: ";
+            for (int i = 0; i < size; i++)
+                cout << arrCopy[i] << " ";
+            cout << "\nTime Complexity: O(n log n)\n";
+            break;
+        }
         default:
             cout << "\nInvalid choice!\n";
         }

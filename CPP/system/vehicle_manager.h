@@ -93,6 +93,12 @@ public:
     {
         return vehicles.size();
     }
+
+    // Assign fastest vehicle (smallest capacity that fits requirement)
+    void assignFastestVehicle(int requiredPassengers)
+    {
+        Analytics::fastestVehicleAssignment(vehicles, requiredPassengers);
+    }
 };
 
 #endif

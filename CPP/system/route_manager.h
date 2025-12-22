@@ -260,6 +260,27 @@ public:
                                                [this](int id)
                                                { return getStationNameById(id); });
     }
+
+    // Show busiest route
+    void showBusiestRoute(const vector<Ticket> &tickets)
+    {
+        Analytics::busiestRouteByTickets(routes, tickets,
+                                         [this](int id)
+                                         { return getStationNameById(id); });
+    }
+
+    // Show traffic density prediction
+    void showTrafficDensity(const vector<Ticket> &tickets, int topN = 5)
+    {
+        Analytics::trafficDensityPrediction(stations, tickets, [this](int id)
+                                            { return getStationNameById(id); }, topN);
+    }
+
+    // Detect cycle in network
+    bool detectCycle()
+    {
+        return graph.detectCycle();
+    }
 };
 
 #endif
