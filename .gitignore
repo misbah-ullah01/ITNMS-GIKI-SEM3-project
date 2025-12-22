@@ -1,2 +1,5 @@
-# Ignore the current project PDF
-/Project CS221.pdf
+﻿# Ignore all Markdown files
+*.md
+
+# Ignore Windows executables
+*.exe
