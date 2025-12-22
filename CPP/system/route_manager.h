@@ -2,6 +2,7 @@
 #define ROUTE_MANAGER_H
 
 #include <iostream>
+#include <string>
 #include "../ds/graph.h"
 #include "../ds/hashtable.h"
 #include "../ds/array.h"

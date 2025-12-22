@@ -2,6 +2,7 @@
 #define GRAPH_H
 
 #include <iostream>
+#include <string>
 #include "array.h"
 #include "pair.h"
 #include "queue.h"

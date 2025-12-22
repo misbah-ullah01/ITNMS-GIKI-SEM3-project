@@ -130,8 +130,9 @@ void displayStationMenu(RouteManager &routeManager, HistoryManager &historyManag
     {
         cout << "\n========== STATION MANAGEMENT ==========\n";
         cout << "1. Add New Station\n";
-        cout << "2. Display All Stations\n";
-        cout << "3. Back to Main Menu\n";
+        cout << "2. Delete Station\n";
+        cout << "3. Display All Stations\n";
+        cout << "4. Back to Main Menu\n";
         cout << "========================================\n";
         cout << "Enter choice: ";
         cin >> stationChoice;
@@ -184,10 +185,29 @@ void displayStationMenu(RouteManager &routeManager, HistoryManager &historyManag
             break;
         }
         case 2:
+        {
+            int deleteID;
+            cout << "\n--- Delete Station ---\n";
+            cout << "Enter Station ID to delete: ";
+            cin >> deleteID;
+
+            if (deleteID <= 0)
+            {
+                cout << "ERROR: Station ID must be positive!\n";
+                break;
+            }
+
+            if (routeManager.removeStation(deleteID))
+            {
+                historyManager.addAction("DELETE_STATION:" + to_string(deleteID));
+            }
+            break;
+        }
+        case 3:
             cout << "\n";
             routeManager.displayStations();
             break;
-        case 3:
+        case 4:
             stationMenuActive = false;
             break;
         default:
@@ -205,8 +225,9 @@ void displayRouteMenu(RouteManager &routeManager, HistoryManager &historyManager
     {
         cout << "\n========== ROUTE MANAGEMENT ==========\n";
         cout << "1. Add New Route\n";
-        cout << "2. Display All Routes\n";
-        cout << "3. Back to Main Menu\n";
+        cout << "2. Delete Route\n";
+        cout << "3. Display All Routes\n";
+        cout << "4. Back to Main Menu\n";
         cout << "=====================================\n";
         cout << "Enter choice: ";
         cin >> routeChoice;
@@ -278,10 +299,29 @@ void displayRouteMenu(RouteManager &routeManager, HistoryManager &historyManager
             break;
         }
         case 2:
+        {
+            int deleteRouteID;
+            cout << "\n--- Delete Route ---\n";
+            cout << "Enter Route ID to delete: ";
+            cin >> deleteRouteID;
+
+            if (deleteRouteID <= 0)
+            {
+                cout << "ERROR: Route ID must be positive!\n";
+                break;
+            }
+
+            if (routeManager.removeRouteById(deleteRouteID))
+            {
+                historyManager.addAction("DELETE_ROUTE:" + to_string(deleteRouteID));
+            }
+            break;
+        }
+        case 3:
             cout << "\n";
             routeManager.displayRoutes();
             break;
-        case 3:
+        case 4:
             routeMenuActive = false;
             break;
         default:
@@ -299,8 +339,9 @@ void displayVehicleMenu(VehicleManager &vehicleManager, HistoryManager &historyM
     {
         cout << "\n========== VEHICLE MANAGEMENT ==========\n";
         cout << "1. Register New Vehicle\n";
-        cout << "2. Display All Vehicles\n";
-        cout << "3. Back to Main Menu\n";
+        cout << "2. Delete Vehicle\n";
+        cout << "3. Display All Vehicles\n";
+        cout << "4. Back to Main Menu\n";
         cout << "=======================================\n";
         cout << "Enter choice: ";
         cin >> vehicleChoice;
@@ -359,10 +400,27 @@ void displayVehicleMenu(VehicleManager &vehicleManager, HistoryManager &historyM
             break;
         }
         case 2:
+        {
+            int deleteVehicleID;
+            cout << "\n--- Delete Vehicle ---\n";
+            cout << "Enter Vehicle ID to delete: ";
+            cin >> deleteVehicleID;
+
+            if (deleteVehicleID <= 0)
+            {
+                cout << "ERROR: Vehicle ID must be positive!\n";
+                break;
+            }
+
+            vehicleManager.removeVehicle(deleteVehicleID);
+            historyManager.addAction("DELETE_VEHICLE:" + to_string(deleteVehicleID));
+            break;
+        }
+        case 3:
             cout << "\n";
             vehicleManager.displayAllVehicles();
             break;
-        case 3:
+        case 4:
             vehicleMenuActive = false;
             break;
         default:
