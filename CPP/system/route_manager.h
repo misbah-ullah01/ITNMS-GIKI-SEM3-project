@@ -200,6 +200,19 @@ public:
         return stationMap.contains(stationID);
     }
 
+    // Update passenger count at a station (increment for arrivals)
+    void incrementStationPassengers(int stationID)
+    {
+        for (int i = 0; i < stations.size(); i++)
+        {
+            if (stations[i].getID() == stationID)
+            {
+                stations[i].addPassenger();
+                break;
+            }
+        }
+    }
+
     // Display all stations
     void displayStations() const
     {

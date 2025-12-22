@@ -590,6 +590,9 @@ void displayPassengerMenu(TicketManager &ticketManager, RouteManager &routeManag
 
             cout << "\n";
             ticketManager.processNextPassenger(startID, endID, startName, endName);
+            // Update passenger counts at both stations
+            routeManager.incrementStationPassengers(startID);
+            routeManager.incrementStationPassengers(endID);
             break;
         }
         case 3:
@@ -621,7 +624,7 @@ void displayViewMenu(RouteManager &routeManager, TicketManager &ticketManager, V
         clearScreen();
         displayHeader();
         cout << "  ============= VIEW SYSTEM INFORMATION =============\n";
-        cout << "  ||                                                ||\n";
+        cout << "  ||                                               ||\n";
         cout << "  ||   1. Display All Stations                     ||\n";
         cout << "  ||   2. Display All Routes                       ||\n";
         cout << "  ||   3. Display All Vehicles                     ||\n";
@@ -633,7 +636,7 @@ void displayViewMenu(RouteManager &routeManager, TicketManager &ticketManager, V
         cout << "  ||   9. Traffic Density Prediction               ||\n";
         cout << "  ||  10. Daily Usage Trends                       ||\n";
         cout << "  ||  11. Back to Main Menu                        ||\n";
-        cout << "  ||                                                ||\n";
+        cout << "  ||                                               ||\n";
         cout << "  ===================================================\n";
         cout << "  Enter choice: ";
         cin >> viewChoice;
@@ -727,14 +730,14 @@ void displayGraphMenu(RouteManager &routeManager)
         clearScreen();
         displayHeader();
         cout << "  =========== GRAPH ALGORITHMS & ANALYSIS ===========\n";
-        cout << "  ||                                                ||\n";
+        cout << "  ||                                               ||\n";
         cout << "  ||   1. BFS Traversal                            ||\n";
         cout << "  ||   2. DFS Traversal                            ||\n";
         cout << "  ||   3. Shortest Path (Dijkstra)                 ||\n";
         cout << "  ||   4. Minimum Spanning Tree (Prim's)           ||\n";
         cout << "  ||   5. Detect Cycle in Network                  ||\n";
         cout << "  ||   6. Back to Main Menu                        ||\n";
-        cout << "  ||                                                ||\n";
+        cout << "  ||                                               ||\n";
         cout << "  ===================================================\n";
         cout << "  Enter choice: ";
         cin >> graphChoice;
@@ -838,12 +841,12 @@ void displayHistoryMenu(HistoryManager &historyManager, RouteManager &routeManag
         clearScreen();
         displayHeader();
         cout << "  ================= HISTORY & UNDO ==================\n";
-        cout << "  ||                                                ||\n";
+        cout << "  ||                                               ||\n";
         cout << "  ||   1. View Action History                      ||\n";
         cout << "  ||   2. Undo Last Action                         ||\n";
         cout << "  ||   3. Clear History                            ||\n";
         cout << "  ||   4. Back to Main Menu                        ||\n";
-        cout << "  ||                                                ||\n";
+        cout << "  ||                                               ||\n";
         cout << "  ===================================================\n";
         cout << "  Enter choice: ";
         cin >> historyChoice;
@@ -954,7 +957,7 @@ void displaySearchSortMenu()
         clearScreen();
         displayHeader();
         cout << "  ============= SEARCHING & SORTING DEMOS =============\n";
-        cout << "  ||                                                  ||\n";
+        cout << "  ||                                                 ||\n";
         cout << "  ||   1. Linear Search Demo                         ||\n";
         cout << "  ||   2. Binary Search Demo                         ||\n";
         cout << "  ||   3. Bubble Sort Demo                           ||\n";
@@ -964,7 +967,7 @@ void displaySearchSortMenu()
         cout << "  ||   7. Merge Sort Demo                            ||\n";
         cout << "  ||   8. Heap Sort Demo                             ||\n";
         cout << "  ||   9. Back to Main Menu                          ||\n";
-        cout << "  ||                                                  ||\n";
+        cout << "  ||                                                 ||\n";
         cout << "  ======================================================\n";
         cout << "  Enter choice: ";
         cin >> choice;
