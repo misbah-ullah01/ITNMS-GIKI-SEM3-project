@@ -25,7 +25,7 @@ public:
     }
 
     // Process next passenger in queue with route information
-    void processNextPassenger(int startStationID = 0, int endStationID = 0)
+    void processNextPassenger(int startStationID = 0, int endStationID = 0, const string &startName = "", const string &endName = "")
     {
         if (passengerQueue.empty())
         {
@@ -43,7 +43,14 @@ public:
              << " | Ticket ID: " << t.getTicketID();
         if (startStationID > 0 && endStationID > 0)
         {
-            cout << " | Route: " << startStationID << " -> " << endStationID;
+            if (!startName.empty() && !endName.empty())
+            {
+                cout << " | Route: " << startName << " -> " << endName;
+            }
+            else
+            {
+                cout << " | Route: " << startStationID << " -> " << endStationID;
+            }
         }
         cout << endl;
     }

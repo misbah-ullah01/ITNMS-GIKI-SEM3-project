@@ -23,6 +23,8 @@
 using namespace std;
 
 // Function prototypes
+void displayHeader();
+void clearScreen();
 void displayMainMenu();
 void displayStationMenu(RouteManager &routeManager, HistoryManager &historyManager);
 void displayRouteMenu(RouteManager &routeManager, HistoryManager &historyManager);
@@ -32,14 +34,49 @@ void displayGraphMenu(RouteManager &routeManager);
 void displayViewMenu(RouteManager &routeManager, TicketManager &ticketManager, VehicleManager &vehicleManager);
 void displayHistoryMenu(HistoryManager &historyManager, RouteManager &routeManager, VehicleManager &vehicleManager);
 void displaySearchSortMenu();
-void displaySearchSortMenu();
+
+// ASCII Art Header - Always displayed at top
+void displayHeader()
+{
+    cout << "\n";
+    cout << "  ============================================================================\n";
+    cout << "  ||                                                                        ||\n";
+    cout << "  ||   _____ _______ _   _ __  __  _____                                    ||\n";
+    cout << "  ||  |_   _|__   __| \\ | |  \\/  |/ ____|                                   ||\n";
+    cout << "  ||    | |    | |  |  \\| | \\  / | (___                                     ||\n";
+    cout << "  ||    | |    | |  | . ` | |\\/| |\\___ \\                                    ||\n";
+    cout << "  ||   _| |_   | |  | |\\  | |  | |____) |                                   ||\n";
+    cout << "  ||  |_____|  |_|  |_| \\_|_|  |_|_____/                                    ||\n";
+    cout << "  ||                                                                        ||\n";
+    cout << "  ||        Intelligent Transport Network Management System                 ||\n";
+    cout << "  ||                          Version 1.0                                   ||\n";
+    cout << "  ||                                                                        ||\n";
+    cout << "  ============================================================================\n";
+    cout << "\n";
+}
+
+// Clear screen (works on Windows)
+void clearScreen()
+{
+#ifdef _WIN32
+    system("cls");
+#else
+    system("clear");
+#endif
+}
+
+// Wait for user to press Enter
+void waitForEnter()
+{
+    cout << "\n  Press Enter to continue...";
+    cin.ignore(10000, '\n');
+    cin.get();
+}
 
 int main()
 {
-    cout << "\n======================================================================\n";
-    cout << "    Welcome to Intelligent Transport Network Management System\n";
-    cout << "                        (ITNMS v1.0)\n";
-    cout << "======================================================================\n\n";
+    clearScreen();
+    displayHeader();
 
     // System Managers
     RouteManager routeManager;
@@ -108,17 +145,21 @@ int main()
 
 void displayMainMenu()
 {
-    cout << "\n========== MAIN MENU ==========\n";
-    cout << "1. Manage Stations\n";
-    cout << "2. Manage Routes\n";
-    cout << "3. Manage Vehicles\n";
-    cout << "4. Manage Passengers & Tickets\n";
-    cout << "5. View System Information\n";
-    cout << "6. Graph Algorithms & Analysis\n";
-    cout << "7. History & Undo\n";
-    cout << "8. Searching & Sorting Demos\n";
-    cout << "9. Exit\n";
-    cout << "===============================\n";
+    clearScreen();
+    displayHeader();
+    cout << "  ==================== MAIN MENU ====================\n";
+    cout << "  ||                                                ||\n";
+    cout << "  ||   1. Manage Stations                           ||\n";
+    cout << "  ||   2. Manage Routes                             ||\n";
+    cout << "  ||   3. Manage Vehicles                           ||\n";
+    cout << "  ||   4. Manage Passengers & Tickets               ||\n";
+    cout << "  ||   5. View System Information                   ||\n";
+    cout << "  ||   6. Graph Algorithms & Analysis               ||\n";
+    cout << "  ||   7. History & Undo                            ||\n";
+    cout << "  ||   8. Searching & Sorting Demos                 ||\n";
+    cout << "  ||   9. Exit                                      ||\n";
+    cout << "  ||                                                ||\n";
+    cout << "  ====================================================\n";
 }
 
 void displayStationMenu(RouteManager &routeManager, HistoryManager &historyManager)
@@ -128,13 +169,17 @@ void displayStationMenu(RouteManager &routeManager, HistoryManager &historyManag
 
     while (stationMenuActive)
     {
-        cout << "\n========== STATION MANAGEMENT ==========\n";
-        cout << "1. Add New Station\n";
-        cout << "2. Delete Station\n";
-        cout << "3. Display All Stations\n";
-        cout << "4. Back to Main Menu\n";
-        cout << "========================================\n";
-        cout << "Enter choice: ";
+        clearScreen();
+        displayHeader();
+        cout << "  =============== STATION MANAGEMENT ===============\n";
+        cout << "  ||                                               ||\n";
+        cout << "  ||   1. Add New Station                         ||\n";
+        cout << "  ||   2. Delete Station                          ||\n";
+        cout << "  ||   3. Display All Stations                    ||\n";
+        cout << "  ||   4. Back to Main Menu                       ||\n";
+        cout << "  ||                                               ||\n";
+        cout << "  ==================================================\n";
+        cout << "  Enter choice: ";
         cin >> stationChoice;
 
         if (cin.fail())
@@ -206,6 +251,7 @@ void displayStationMenu(RouteManager &routeManager, HistoryManager &historyManag
         case 3:
             cout << "\n";
             routeManager.displayStations();
+            waitForEnter();
             break;
         case 4:
             stationMenuActive = false;
@@ -223,13 +269,17 @@ void displayRouteMenu(RouteManager &routeManager, HistoryManager &historyManager
 
     while (routeMenuActive)
     {
-        cout << "\n========== ROUTE MANAGEMENT ==========\n";
-        cout << "1. Add New Route\n";
-        cout << "2. Delete Route\n";
-        cout << "3. Display All Routes\n";
-        cout << "4. Back to Main Menu\n";
-        cout << "=====================================\n";
-        cout << "Enter choice: ";
+        clearScreen();
+        displayHeader();
+        cout << "  ================ ROUTE MANAGEMENT ================\n";
+        cout << "  ||                                               ||\n";
+        cout << "  ||   1. Add New Route                           ||\n";
+        cout << "  ||   2. Delete Route                            ||\n";
+        cout << "  ||   3. Display All Routes                      ||\n";
+        cout << "  ||   4. Back to Main Menu                       ||\n";
+        cout << "  ||                                               ||\n";
+        cout << "  ==================================================\n";
+        cout << "  Enter choice: ";
         cin >> routeChoice;
 
         if (cin.fail())
@@ -320,6 +370,7 @@ void displayRouteMenu(RouteManager &routeManager, HistoryManager &historyManager
         case 3:
             cout << "\n";
             routeManager.displayRoutes();
+            waitForEnter();
             break;
         case 4:
             routeMenuActive = false;
@@ -337,13 +388,17 @@ void displayVehicleMenu(VehicleManager &vehicleManager, HistoryManager &historyM
 
     while (vehicleMenuActive)
     {
-        cout << "\n========== VEHICLE MANAGEMENT ==========\n";
-        cout << "1. Register New Vehicle\n";
-        cout << "2. Delete Vehicle\n";
-        cout << "3. Display All Vehicles\n";
-        cout << "4. Back to Main Menu\n";
-        cout << "=======================================\n";
-        cout << "Enter choice: ";
+        clearScreen();
+        displayHeader();
+        cout << "  =============== VEHICLE MANAGEMENT ===============\n";
+        cout << "  ||                                               ||\n";
+        cout << "  ||   1. Register New Vehicle                    ||\n";
+        cout << "  ||   2. Delete Vehicle                          ||\n";
+        cout << "  ||   3. Display All Vehicles                    ||\n";
+        cout << "  ||   4. Back to Main Menu                       ||\n";
+        cout << "  ||                                               ||\n";
+        cout << "  ==================================================\n";
+        cout << "  Enter choice: ";
         cin >> vehicleChoice;
 
         if (cin.fail())
@@ -419,6 +474,7 @@ void displayVehicleMenu(VehicleManager &vehicleManager, HistoryManager &historyM
         case 3:
             cout << "\n";
             vehicleManager.displayAllVehicles();
+            waitForEnter();
             break;
         case 4:
             vehicleMenuActive = false;
@@ -436,14 +492,18 @@ void displayPassengerMenu(TicketManager &ticketManager, RouteManager &routeManag
 
     while (passengerMenuActive)
     {
-        cout << "\n========== PASSENGER & TICKET MANAGEMENT ==========\n";
-        cout << "1. Add Passenger to Queue\n";
-        cout << "2. Process Next Passenger (Issue Ticket)\n";
-        cout << "3. Display Passenger Queue\n";
-        cout << "4. Display All Issued Tickets\n";
-        cout << "5. Back to Main Menu\n";
-        cout << "==================================================\n";
-        cout << "Enter choice: ";
+        clearScreen();
+        displayHeader();
+        cout << "  =========== PASSENGER & TICKET MANAGEMENT ===========\n";
+        cout << "  ||                                                  ||\n";
+        cout << "  ||   1. Add Passenger to Queue                     ||\n";
+        cout << "  ||   2. Process Next Passenger (Issue Ticket)      ||\n";
+        cout << "  ||   3. Display Passenger Queue                    ||\n";
+        cout << "  ||   4. Display All Issued Tickets                 ||\n";
+        cout << "  ||   5. Back to Main Menu                          ||\n";
+        cout << "  ||                                                  ||\n";
+        cout << "  ======================================================\n";
+        cout << "  Enter choice: ";
         cin >> passengerChoice;
 
         if (cin.fail())
@@ -529,16 +589,18 @@ void displayPassengerMenu(TicketManager &ticketManager, RouteManager &routeManag
             }
 
             cout << "\n";
-            ticketManager.processNextPassenger(startID, endID);
+            ticketManager.processNextPassenger(startID, endID, startName, endName);
             break;
         }
         case 3:
             cout << "\n";
             ticketManager.displayQueue();
+            waitForEnter();
             break;
         case 4:
             cout << "\n";
             ticketManager.displayAllTicketsWithNames(RouteManager::getStationNameByIdStatic);
+            waitForEnter();
             break;
         case 5:
             passengerMenuActive = false;
@@ -556,20 +618,24 @@ void displayViewMenu(RouteManager &routeManager, TicketManager &ticketManager, V
 
     while (viewMenuActive)
     {
-        cout << "\n========== VIEW SYSTEM INFORMATION ==========\n";
-        cout << "1. Display All Stations\n";
-        cout << "2. Display All Routes\n";
-        cout << "3. Display All Vehicles\n";
-        cout << "4. Display All Tickets\n";
-        cout << "5. Display Passenger Queue\n";
-        cout << "6. Show Most Crowded Station (by Tickets)\n";
-        cout << "7. Show Busiest Route\n";
-        cout << "8. Fastest Vehicle Assignment\n";
-        cout << "9. Traffic Density Prediction\n";
-        cout << "10. Daily Usage Trends\n";
-        cout << "11. Back to Main Menu\n";
-        cout << "============================================\n";
-        cout << "Enter choice: ";
+        clearScreen();
+        displayHeader();
+        cout << "  ============= VIEW SYSTEM INFORMATION =============\n";
+        cout << "  ||                                                ||\n";
+        cout << "  ||   1. Display All Stations                     ||\n";
+        cout << "  ||   2. Display All Routes                       ||\n";
+        cout << "  ||   3. Display All Vehicles                     ||\n";
+        cout << "  ||   4. Display All Tickets                      ||\n";
+        cout << "  ||   5. Display Passenger Queue                  ||\n";
+        cout << "  ||   6. Show Most Crowded Station (by Tickets)   ||\n";
+        cout << "  ||   7. Show Busiest Route                       ||\n";
+        cout << "  ||   8. Fastest Vehicle Assignment               ||\n";
+        cout << "  ||   9. Traffic Density Prediction               ||\n";
+        cout << "  ||  10. Daily Usage Trends                       ||\n";
+        cout << "  ||  11. Back to Main Menu                        ||\n";
+        cout << "  ||                                                ||\n";
+        cout << "  ===================================================\n";
+        cout << "  Enter choice: ";
         cin >> viewChoice;
 
         if (cin.fail())
@@ -585,22 +651,27 @@ void displayViewMenu(RouteManager &routeManager, TicketManager &ticketManager, V
         case 1:
             cout << "\n";
             routeManager.displayStations();
+            waitForEnter();
             break;
         case 2:
             cout << "\n";
             routeManager.displayRoutes();
+            waitForEnter();
             break;
         case 3:
             cout << "\n";
             vehicleManager.displayAllVehicles();
+            waitForEnter();
             break;
         case 4:
             cout << "\n";
             ticketManager.displayAllTicketsWithNames(RouteManager::getStationNameByIdStatic);
+            waitForEnter();
             break;
         case 5:
             cout << "\n";
             ticketManager.displayQueue();
+            waitForEnter();
             break;
         case 6:
             cout << "\n";
@@ -610,10 +681,12 @@ void displayViewMenu(RouteManager &routeManager, TicketManager &ticketManager, V
                 // For now, call analytics via RouteManager
                 routeManager.showMostCrowdedStation(ticketManager.getAllTickets());
             }
+            waitForEnter();
             break;
         case 7:
             cout << "\n";
             routeManager.showBusiestRoute(ticketManager.getAllTickets());
+            waitForEnter();
             break;
         case 8:
         {
@@ -622,15 +695,18 @@ void displayViewMenu(RouteManager &routeManager, TicketManager &ticketManager, V
             cin >> reqPassengers;
             cout << "\n";
             vehicleManager.assignFastestVehicle(reqPassengers);
+            waitForEnter();
             break;
         }
         case 9:
             cout << "\n";
             routeManager.showTrafficDensity(ticketManager.getAllTickets(), 5);
+            waitForEnter();
             break;
         case 10:
             cout << "\n";
             Analytics::dailyUsageTrends(ticketManager.getAllTickets());
+            waitForEnter();
             break;
         case 11:
             viewMenuActive = false;
@@ -648,15 +724,19 @@ void displayGraphMenu(RouteManager &routeManager)
 
     while (graphMenuActive)
     {
-        cout << "\n========== GRAPH ALGORITHMS & ANALYSIS ==========\n";
-        cout << "1. BFS Traversal\n";
-        cout << "2. DFS Traversal\n";
-        cout << "3. Shortest Path (Dijkstra)\n";
-        cout << "4. Minimum Spanning Tree (Prim's)\n";
-        cout << "5. Detect Cycle in Network\n";
-        cout << "6. Back to Main Menu\n";
-        cout << "================================================\n";
-        cout << "Enter choice: ";
+        clearScreen();
+        displayHeader();
+        cout << "  =========== GRAPH ALGORITHMS & ANALYSIS ===========\n";
+        cout << "  ||                                                ||\n";
+        cout << "  ||   1. BFS Traversal                            ||\n";
+        cout << "  ||   2. DFS Traversal                            ||\n";
+        cout << "  ||   3. Shortest Path (Dijkstra)                 ||\n";
+        cout << "  ||   4. Minimum Spanning Tree (Prim's)           ||\n";
+        cout << "  ||   5. Detect Cycle in Network                  ||\n";
+        cout << "  ||   6. Back to Main Menu                        ||\n";
+        cout << "  ||                                                ||\n";
+        cout << "  ===================================================\n";
+        cout << "  Enter choice: ";
         cin >> graphChoice;
 
         if (cin.fail())
@@ -683,6 +763,7 @@ void displayGraphMenu(RouteManager &routeManager)
             }
             cout << "\n";
             routeManager.BFS(startID);
+            waitForEnter();
             break;
         }
         case 2:
@@ -699,6 +780,7 @@ void displayGraphMenu(RouteManager &routeManager)
             }
             cout << "\n";
             routeManager.DFS(startID);
+            waitForEnter();
             break;
         }
         case 3:
@@ -721,11 +803,13 @@ void displayGraphMenu(RouteManager &routeManager)
             }
             cout << "\n";
             routeManager.shortestPath(startID, endID);
+            waitForEnter();
             break;
         }
         case 4:
             cout << "\n";
             routeManager.minimumSpanningTree();
+            waitForEnter();
             break;
         case 5:
             cout << "\n";
@@ -733,6 +817,7 @@ void displayGraphMenu(RouteManager &routeManager)
                 cout << "Cycle detected in the network!\n";
             else
                 cout << "No cycle found in the network.\n";
+            waitForEnter();
             break;
         case 6:
             graphMenuActive = false;
@@ -750,13 +835,17 @@ void displayHistoryMenu(HistoryManager &historyManager, RouteManager &routeManag
 
     while (historyMenuActive)
     {
-        cout << "\n========== HISTORY & UNDO ==========" << endl;
-        cout << "1. View Action History" << endl;
-        cout << "2. Undo Last Action" << endl;
-        cout << "3. Clear History" << endl;
-        cout << "4. Back to Main Menu" << endl;
-        cout << "===================================" << endl;
-        cout << "Enter choice: ";
+        clearScreen();
+        displayHeader();
+        cout << "  ================= HISTORY & UNDO ==================\n";
+        cout << "  ||                                                ||\n";
+        cout << "  ||   1. View Action History                      ||\n";
+        cout << "  ||   2. Undo Last Action                         ||\n";
+        cout << "  ||   3. Clear History                            ||\n";
+        cout << "  ||   4. Back to Main Menu                        ||\n";
+        cout << "  ||                                                ||\n";
+        cout << "  ===================================================\n";
+        cout << "  Enter choice: ";
         cin >> historyChoice;
 
         if (cin.fail())
@@ -772,6 +861,7 @@ void displayHistoryMenu(HistoryManager &historyManager, RouteManager &routeManag
         case 1:
             cout << "\n";
             historyManager.displayHistory();
+            waitForEnter();
             break;
         case 2:
         {
@@ -861,18 +951,22 @@ void displaySearchSortMenu()
 
     while (menuActive)
     {
-        cout << "\n========== SEARCHING & SORTING DEMOS ==========\n";
-        cout << "1. Linear Search Demo\n";
-        cout << "2. Binary Search Demo\n";
-        cout << "3. Bubble Sort Demo\n";
-        cout << "4. Selection Sort Demo\n";
-        cout << "5. Insertion Sort Demo\n";
-        cout << "6. Quick Sort Demo\n";
-        cout << "7. Merge Sort Demo\n";
-        cout << "8. Heap Sort Demo\n";
-        cout << "9. Back to Main Menu\n";
-        cout << "===============================================\n";
-        cout << "Enter choice: ";
+        clearScreen();
+        displayHeader();
+        cout << "  ============= SEARCHING & SORTING DEMOS =============\n";
+        cout << "  ||                                                  ||\n";
+        cout << "  ||   1. Linear Search Demo                         ||\n";
+        cout << "  ||   2. Binary Search Demo                         ||\n";
+        cout << "  ||   3. Bubble Sort Demo                           ||\n";
+        cout << "  ||   4. Selection Sort Demo                        ||\n";
+        cout << "  ||   5. Insertion Sort Demo                        ||\n";
+        cout << "  ||   6. Quick Sort Demo                            ||\n";
+        cout << "  ||   7. Merge Sort Demo                            ||\n";
+        cout << "  ||   8. Heap Sort Demo                             ||\n";
+        cout << "  ||   9. Back to Main Menu                          ||\n";
+        cout << "  ||                                                  ||\n";
+        cout << "  ======================================================\n";
+        cout << "  Enter choice: ";
         cin >> choice;
 
         if (cin.fail())

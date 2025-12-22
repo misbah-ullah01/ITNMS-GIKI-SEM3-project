@@ -1,5 +1,6 @@
-﻿# Ignore all Markdown files
+﻿# Ignore all Markdown files except README
 *.md
+!README.md
 
 # Ignore Windows executables
 *.exe

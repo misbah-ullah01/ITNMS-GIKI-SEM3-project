@@ -210,13 +210,28 @@ public:
         }
     }
 
-    // Display all routes
+    // Display all routes with station names
     void displayRoutes() const
     {
         cout << "Routes:" << endl;
         for (int i = 0; i < routes.size(); i++)
         {
-            routes[i].display();
+            string startName = "Unknown";
+            string endName = "Unknown";
+
+            // Find station names
+            for (int j = 0; j < stations.size(); j++)
+            {
+                if (stations[j].getID() == routes[i].getStartStationID())
+                    startName = stations[j].getName();
+                if (stations[j].getID() == routes[i].getEndStationID())
+                    endName = stations[j].getName();
+            }
+
+            cout << "Route ID: " << routes[i].getRouteID()
+                 << ", From: " << startName
+                 << ", To: " << endName
+                 << ", Distance: " << routes[i].getDistance() << " km" << endl;
         }
     }
 
