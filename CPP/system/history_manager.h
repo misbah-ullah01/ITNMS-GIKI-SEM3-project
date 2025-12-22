@@ -2,14 +2,14 @@
 #define HISTORY_MANAGER_H
 
 #include <iostream>
-#include <stack>
-#include <string>
+#include "../ds/stack.h"
+#include "../ds/array.h"
 using namespace std;
 
 class HistoryManager
 {
 private:
-    stack<string> historyStack; // Stores actions for undo
+    Stack<string> historyStack; // Stores actions for undo
 
 public:
     // Add an action to history
@@ -47,7 +47,7 @@ public:
     }
 
     // Display all history
-    void displayHistory() const
+    void displayHistory()
     {
         if (historyStack.empty())
         {
@@ -55,13 +55,27 @@ public:
             return;
         }
 
-        stack<string> tempStack = historyStack; // copy to preserve original
-        cout << "Action History (most recent first):" << endl;
-        while (!tempStack.empty())
+        // Use a temporary array to preserve order
+        DynamicArray<string> temp;
+        while (!historyStack.empty())
         {
-            cout << "- " << tempStack.top() << endl;
-            tempStack.pop();
+            temp.push_back(historyStack.top());
+            historyStack.pop();
         }
+        cout << "Action History (most recent first):" << endl;
+        for (int i = 0; i < temp.size(); i++)
+        {
+            cout << "- " << temp[i] << endl;
+            historyStack.push(temp[i]); // restore
+        }
+        // Restore in reverse order
+        DynamicArray<string> reversed;
+        for (int i = temp.size() - 1; i >= 0; i--)
+            reversed.push_back(temp[i]);
+        while (!historyStack.empty())
+            historyStack.pop();
+        for (int i = reversed.size() - 1; i >= 0; i--)
+            historyStack.push(reversed[i]);
     }
 
     // Clear all history

@@ -2,7 +2,6 @@
 #define PASSENGER_H
 
 #include <iostream>
-#include <string>
 using namespace std;
 
 class Passenger
@@ -13,6 +12,7 @@ private:
     int age; // passenger age
 
 public:
+    Passenger() : name(""), id(0), age(0) {}
     // Constructor
     Passenger(int _id, string _name, int _age)
         : id(_id), name(_name), age(_age) {}

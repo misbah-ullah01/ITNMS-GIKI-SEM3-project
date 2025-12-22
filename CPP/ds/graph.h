@@ -2,23 +2,25 @@
 #define GRAPH_H
 
 #include <iostream>
-#include <vector>
-#include <queue>
-#include <stack>
-#include <limits>
-#include <set>
-#include <functional>
-#include <string>
+#include "array.h"
+#include "pair.h"
+#include "queue.h"
+#include "stack.h"
 using namespace std;
 
-// Graph class using adjacency list
+// Define INT_MAX replacement to avoid <limits>
+#ifndef INT_MAX_VALUE
+#define INT_MAX_VALUE 2147483647
+#endif
+
+// Graph class using adjacency list with custom DS
 class Graph
 {
 private:
-    int V;                                    // number of vertices
-    vector<int> nodes;                        // store node IDs
-    vector<vector<pair<int, int>>> adj;       // adjacency list: pair<neighbor_index, weight>
-    std::function<string(int)> labelProvider; // optional label provider by node ID
+    int V;                                          // number of vertices
+    DynamicArray<int> nodes;                        // store node IDs
+    DynamicArray<DynamicArray<Pair<int, int>>> adj; // adjacency list: Pair<neighbor_index, weight>
+    string (*labelProvider)(int);                   // function pointer for labels
 
     string nodeLabelByIndex(int idx)
     {
@@ -29,27 +31,30 @@ private:
     }
 
 public:
-    Graph() : V(0) {}
+    Graph() : V(0), labelProvider(nullptr) {}
 
     // Clear the entire graph
     void clear()
     {
         V = 0;
-        nodes.clear();
-        adj.clear();
+        // Reset arrays
+        while (nodes.size() > 0)
+            nodes.erase(nodes.size() - 1);
+        while (adj.size() > 0)
+            adj.erase(adj.size() - 1);
     }
 
     // Set a label provider to display friendly names
-    void setLabelProvider(std::function<string(int)> provider)
+    void setLabelProvider(string (*provider)(int))
     {
-        labelProvider = std::move(provider);
+        labelProvider = provider;
     }
 
     // Add a new vertex
     void addVertex(int value)
     {
         nodes.push_back(value);
-        adj.push_back(vector<pair<int, int>>());
+        adj.push_back(DynamicArray<Pair<int, int>>());
         V++;
     }
 
@@ -69,11 +74,11 @@ public:
         int j = getIndex(v);
         if (i == -1 || j == -1)
         {
-            cout << "Node not found!\n";
+            cout << "Node not found!\\n";
             return;
         }
-        adj[i].push_back({j, weight});
-        adj[j].push_back({i, weight}); // for undirected graph
+        adj[i].push_back(Pair<int, int>(j, weight));
+        adj[j].push_back(Pair<int, int>(i, weight)); // for undirected graph
     }
 
     // Display graph
@@ -82,11 +87,12 @@ public:
         for (int i = 0; i < V; i++)
         {
             cout << nodeLabelByIndex(i) << " -> ";
-            for (auto &p : adj[i])
+            for (int k = 0; k < adj[i].size(); k++)
             {
+                Pair<int, int> &p = adj[i][k];
                 cout << "(" << nodeLabelByIndex(p.first) << "," << p.second << ") ";
             }
-            cout << "\n";
+            cout << "\\n";
         }
     }
 
@@ -97,8 +103,11 @@ public:
         if (s == -1)
             return;
 
-        vector<bool> visited(V, false);
-        queue<int> q;
+        DynamicArray<bool> visited(V);
+        for (int i = 0; i < V; i++)
+            visited.push_back(false);
+
+        Queue<int> q;
         visited[s] = true;
         q.push(s);
 
@@ -108,9 +117,9 @@ public:
             q.pop();
             cout << nodeLabelByIndex(u) << " ";
 
-            for (auto &p : adj[u])
+            for (int k = 0; k < adj[u].size(); k++)
             {
-                int v = p.first;
+                int v = adj[u][k].first;
                 if (!visited[v])
                 {
                     visited[v] = true;
@@ -118,7 +127,7 @@ public:
                 }
             }
         }
-        cout << "\n";
+        cout << "\\n";
     }
 
     // DFS from start node
@@ -128,8 +137,11 @@ public:
         if (s == -1)
             return;
 
-        vector<bool> visited(V, false);
-        stack<int> st;
+        DynamicArray<bool> visited(V);
+        for (int i = 0; i < V; i++)
+            visited.push_back(false);
+
+        Stack<int> st;
         st.push(s);
 
         while (!st.empty())
@@ -142,14 +154,14 @@ public:
                 cout << nodeLabelByIndex(u) << " ";
             }
 
-            for (auto &p : adj[u])
+            for (int k = 0; k < adj[u].size(); k++)
             {
-                int v = p.first;
+                int v = adj[u][k].first;
                 if (!visited[v])
                     st.push(v);
             }
         }
-        cout << "\n";
+        cout << "\\n";
     }
 
     // Dijkstra: shortest path from start node
@@ -159,37 +171,52 @@ public:
         if (s == -1)
             return;
 
-        vector<int> dist(V, numeric_limits<int>::max());
-        vector<int> parent(V, -1);
-        dist[s] = 0;
-        set<pair<int, int>> pq; // {distance, node}
-        pq.insert({0, s});
-
-        while (!pq.empty())
+        DynamicArray<int> dist(V);
+        DynamicArray<int> parent(V);
+        for (int i = 0; i < V; i++)
         {
-            auto it = pq.begin();
-            int u = it->second;
-            pq.erase(it);
+            dist.push_back(INT_MAX_VALUE);
+            parent.push_back(-1);
+        }
+        dist[s] = 0;
 
-            for (auto &p : adj[u])
+        // Simple O(V^2) Dijkstra without priority queue
+        DynamicArray<bool> processed(V);
+        for (int i = 0; i < V; i++)
+            processed.push_back(false);
+
+        for (int count = 0; count < V; count++)
+        {
+            // Find min dist vertex not yet processed
+            int u = -1;
+            for (int i = 0; i < V; i++)
             {
-                int v = p.first;
-                int w = p.second;
+                if (!processed[i] && (u == -1 || dist[i] < dist[u]))
+                    u = i;
+            }
+
+            if (u == -1 || dist[u] == INT_MAX_VALUE)
+                break;
+
+            processed[u] = true;
+
+            for (int k = 0; k < adj[u].size(); k++)
+            {
+                int v = adj[u][k].first;
+                int w = adj[u][k].second;
                 if (dist[u] + w < dist[v])
                 {
-                    pq.erase({dist[v], v});
                     dist[v] = dist[u] + w;
                     parent[v] = u;
-                    pq.insert({dist[v], v});
                 }
             }
         }
 
         // Print path from start to end
         int e = getIndex(end);
-        cout << "Shortest distance: " << dist[e] << "\n";
+        cout << "Shortest distance: " << dist[e] << "\\n";
         cout << "Path: ";
-        vector<int> path;
+        DynamicArray<int> path;
         int curr = e;
         while (curr != -1)
         {
@@ -198,16 +225,16 @@ public:
         }
         for (int i = path.size() - 1; i >= 0; i--)
             cout << nodeLabelByIndex(path[i]) << " ";
-        cout << "\n";
+        cout << "\\n";
     }
 
     // Detect cycle in undirected graph using DFS
-    bool detectCycleUtil(int u, vector<bool> &visited, int par)
+    bool detectCycleUtil(int u, DynamicArray<bool> &visited, int par)
     {
         visited[u] = true;
-        for (auto &p : adj[u])
+        for (int k = 0; k < adj[u].size(); k++)
         {
-            int v = p.first;
+            int v = adj[u][k].first;
             if (!visited[v])
             {
                 if (detectCycleUtil(v, visited, u))
@@ -223,7 +250,10 @@ public:
 
     bool detectCycle()
     {
-        vector<bool> visited(V, false);
+        DynamicArray<bool> visited(V);
+        for (int i = 0; i < V; i++)
+            visited.push_back(false);
+
         for (int i = 0; i < V; i++)
         {
             if (!visited[i])
@@ -236,8 +266,13 @@ public:
     // Prim's MST
     void MST()
     {
-        vector<bool> inMST(V, false);
-        vector<int> key(V, numeric_limits<int>::max());
+        DynamicArray<bool> inMST(V);
+        DynamicArray<int> key(V);
+        for (int i = 0; i < V; i++)
+        {
+            inMST.push_back(false);
+            key.push_back(INT_MAX_VALUE);
+        }
         key[0] = 0;
         int mstWeight = 0;
 
@@ -252,32 +287,33 @@ public:
 
             inMST[u] = true;
 
-            for (auto &p : adj[u])
+            for (int k = 0; k < adj[u].size(); k++)
             {
-                int v = p.first;
-                int w = p.second;
+                int v = adj[u][k].first;
+                int w = adj[u][k].second;
                 if (!inMST[v] && w < key[v])
                     key[v] = w;
             }
         }
 
-        cout << "MST Edges:\n";
+        cout << "MST Edges:\\n";
         for (int i = 1; i < V; i++)
         {
             for (int j = 0; j < V; j++)
             {
-                for (auto &p : adj[j])
+                for (int k = 0; k < adj[j].size(); k++)
                 {
+                    Pair<int, int> &p = adj[j][k];
                     if (p.first == i && inMST[j])
                     {
-                        cout << nodeLabelByIndex(j) << " - " << nodeLabelByIndex(i) << " : " << p.second << "\n";
+                        cout << nodeLabelByIndex(j) << " - " << nodeLabelByIndex(i) << " : " << p.second << "\\n";
                         mstWeight += p.second;
                         break;
                     }
                 }
             }
         }
-        cout << "Total MST Weight: " << mstWeight << "\n";
+        cout << "Total MST Weight: " << mstWeight << "\\n";
     }
 };
 

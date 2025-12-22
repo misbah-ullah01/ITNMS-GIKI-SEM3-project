@@ -2,9 +2,8 @@
 #define TICKET_MANAGER_H
 
 #include <iostream>
-#include <queue>
-#include <vector>
-#include <functional>
+#include "../ds/queue.h"
+#include "../ds/array.h"
 #include "../models/passenger.h"
 #include "../models/ticket.h"
 
@@ -13,9 +12,9 @@ using namespace std;
 class TicketManager
 {
 private:
-    queue<Passenger> passengerQueue; // FIFO queue for passengers
-    vector<Ticket> ticketsIssued;    // Store all issued tickets
-    int nextTicketID = 1;            // Auto-increment ticket ID
+    Queue<Passenger> passengerQueue;    // FIFO queue for passengers
+    DynamicArray<Ticket> ticketsIssued; // Store all issued tickets
+    int nextTicketID = 1;               // Auto-increment ticket ID
 
 public:
     // Add passenger to queue
@@ -58,7 +57,7 @@ public:
             return;
         }
 
-        queue<Passenger> tempQueue = passengerQueue; // copy to preserve original
+        Queue<Passenger> tempQueue = passengerQueue; // copy to preserve original
         cout << "Passengers in queue:" << endl;
         while (!tempQueue.empty())
         {
@@ -77,9 +76,9 @@ public:
         }
 
         cout << "Issued Tickets:" << endl;
-        for (const auto &t : ticketsIssued)
+        for (int i = 0; i < ticketsIssued.size(); i++)
         {
-            t.display();
+            ticketsIssued[i].display();
         }
     }
 
@@ -89,8 +88,8 @@ public:
         return ticketsIssued.size();
     }
 
-    // Display tickets with station names
-    void displayAllTicketsWithNames(function<string(int)> getStationName) const
+    // Display tickets with station names (uses function pointer instead of std::function)
+    void displayAllTicketsWithNames(string (*getStationName)(int)) const
     {
         if (ticketsIssued.empty())
         {
@@ -99,8 +98,9 @@ public:
         }
 
         cout << "Issued Tickets:" << endl;
-        for (const auto &t : ticketsIssued)
+        for (int i = 0; i < ticketsIssued.size(); i++)
         {
+            const Ticket &t = ticketsIssued[i];
             if (t.getStartStationID() > 0 && t.getEndStationID() > 0)
             {
                 t.displayWithNames(getStationName(t.getStartStationID()),
@@ -114,7 +114,7 @@ public:
     }
 
     // Get all tickets (for analytics)
-    const vector<Ticket> &getAllTickets() const
+    const DynamicArray<Ticket> &getAllTickets() const
     {
         return ticketsIssued;
     }

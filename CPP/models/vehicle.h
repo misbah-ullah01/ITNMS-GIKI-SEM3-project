@@ -2,7 +2,6 @@
 #define VEHICLE_H
 
 #include <iostream>
-#include <string>
 using namespace std;
 
 class Vehicle
@@ -13,6 +12,7 @@ private:
     int capacity;  // Number of passengers it can carry
 
 public:
+    Vehicle() : vehicleID(0), name(""), capacity(0) {}
     // Constructor
     Vehicle(int _vehicleID, string _name, int _capacity)
         : vehicleID(_vehicleID), name(_name), capacity(_capacity) {}

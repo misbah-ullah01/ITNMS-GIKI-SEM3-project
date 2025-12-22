@@ -2,14 +2,9 @@
 #define ROUTE_MANAGER_H
 
 #include <iostream>
-#include <vector>
-#include <queue>
-#include <stack>
-#include <limits>
-#include <algorithm>
-#include <cctype>
 #include "../ds/graph.h"
 #include "../ds/hashtable.h"
+#include "../ds/array.h"
 #include "../models/station.h"
 #include "../models/route.h"
 #include "../models/ticket.h"
@@ -21,16 +16,19 @@ class RouteManager
 {
 private:
     Graph graph;                        // Graph representing stations and routes
-    vector<Station> stations;           // List of all stations (for ordered display)
-    vector<Route> routes;               // List of all routes (for ordered display)
+    DynamicArray<Station> stations;     // List of all stations (for ordered display)
+    DynamicArray<Route> routes;         // List of all routes (for ordered display)
     HashTable<int, Station> stationMap; // O(1) lookup: ID -> Station
     HashTable<int, Route> routeMap;     // O(1) lookup: ID -> Route
 
     static string toLower(const string &s)
     {
         string out = s;
-        transform(out.begin(), out.end(), out.begin(), [](unsigned char c)
-                  { return std::tolower(c); });
+        for (int i = 0; i < (int)out.size(); i++)
+        {
+            if (out[i] >= 'A' && out[i] <= 'Z')
+                out[i] = out[i] + ('a' - 'A');
+        }
         return out;
     }
 
@@ -38,33 +36,30 @@ private:
     {
         graph.clear();
         // Re-add all station vertices
-        for (const auto &s : stations)
+        for (int i = 0; i < stations.size(); i++)
         {
-            graph.addVertex(s.getID());
+            graph.addVertex(stations[i].getID());
         }
         // Re-add all edges
-        for (const auto &r : routes)
+        for (int i = 0; i < routes.size(); i++)
         {
-            graph.addEdge(r.getStartStationID(), r.getEndStationID(), (int)r.getDistance());
+            graph.addEdge(routes[i].getStartStationID(), routes[i].getEndStationID(), (int)routes[i].getDistance());
         }
     }
 
 public:
     RouteManager() : stationMap(100), routeMap(100) // Initialize hash tables with capacity
     {
-        // Provide station names to graph for user-friendly labels
-        graph.setLabelProvider([this](int stationId)
-                               { return getStationNameById(stationId); });
     }
 
     // Find station ID by name (case-insensitive); returns -1 if not found
     int findStationIdByName(const string &name) const
     {
         string key = toLower(name);
-        for (const auto &s : stations)
+        for (int i = 0; i < stations.size(); i++)
         {
-            if (toLower(s.getName()) == key)
-                return s.getID();
+            if (toLower(stations[i].getName()) == key)
+                return stations[i].getID();
         }
         return -1;
     }
@@ -73,11 +68,11 @@ public:
     // Using HashTable for O(1) lookup
     string getStationNameById(int stationID) const
     {
-        // Search in vector since we need the actual object
-        for (const auto &s : stations)
+        // Search in array since we need the actual object
+        for (int i = 0; i < stations.size(); i++)
         {
-            if (s.getID() == stationID)
-                return s.getName();
+            if (stations[i].getID() == stationID)
+                return stations[i].getName();
         }
         return "ID " + to_string(stationID);
     }
@@ -143,27 +138,26 @@ public:
             return false;
         }
 
-        // Remove from vector
-        for (auto it = stations.begin(); it != stations.end(); ++it)
+        // Remove from array
+        for (int i = 0; i < stations.size(); i++)
         {
-            if (it->getID() == stationID)
+            if (stations[i].getID() == stationID)
             {
-                stations.erase(it);
+                stations.erase(i);
                 break;
             }
         }
 
         // Remove any routes connected to this station
-        vector<Route> newRoutes;
-        newRoutes.reserve(routes.size());
-        for (const auto &r : routes)
+        DynamicArray<Route> newRoutes;
+        for (int i = 0; i < routes.size(); i++)
         {
-            if (r.getStartStationID() == stationID || r.getEndStationID() == stationID)
+            if (routes[i].getStartStationID() == stationID || routes[i].getEndStationID() == stationID)
             {
-                routeMap.remove(r.getRouteID()); // Also remove from hash table
+                routeMap.remove(routes[i].getRouteID()); // Also remove from hash table
                 continue;
             }
-            newRoutes.push_back(r);
+            newRoutes.push_back(routes[i]);
         }
         routes.swap(newRoutes);
 
@@ -183,12 +177,12 @@ public:
             return false;
         }
 
-        // Remove from vector
-        for (auto it = routes.begin(); it != routes.end(); ++it)
+        // Remove from array
+        for (int i = 0; i < routes.size(); i++)
         {
-            if (it->getRouteID() == routeID)
+            if (routes[i].getRouteID() == routeID)
             {
-                routes.erase(it);
+                routes.erase(i);
                 break;
             }
         }
@@ -209,9 +203,9 @@ public:
     void displayStations() const
     {
         cout << "Stations:" << endl;
-        for (const auto &s : stations)
+        for (int i = 0; i < stations.size(); i++)
         {
-            s.display();
+            stations[i].display();
         }
     }
 
@@ -219,9 +213,9 @@ public:
     void displayRoutes() const
     {
         cout << "Routes:" << endl;
-        for (const auto &r : routes)
+        for (int i = 0; i < routes.size(); i++)
         {
-            r.display();
+            routes[i].display();
         }
     }
 
@@ -254,26 +248,21 @@ public:
     }
 
     // Show most crowded station based on ticket activity
-    void showMostCrowdedStation(const vector<Ticket> &tickets)
+    void showMostCrowdedStation(const DynamicArray<Ticket> &tickets)
     {
-        Analytics::mostCrowdedStationByTickets(stations, tickets,
-                                               [this](int id)
-                                               { return getStationNameById(id); });
+        Analytics::mostCrowdedStationByTickets(stations, tickets, getStationNameByIdStatic);
     }
 
     // Show busiest route
-    void showBusiestRoute(const vector<Ticket> &tickets)
+    void showBusiestRoute(const DynamicArray<Ticket> &tickets)
     {
-        Analytics::busiestRouteByTickets(routes, tickets,
-                                         [this](int id)
-                                         { return getStationNameById(id); });
+        Analytics::busiestRouteByTickets(routes, tickets, getStationNameByIdStatic);
     }
 
     // Show traffic density prediction
-    void showTrafficDensity(const vector<Ticket> &tickets, int topN = 5)
+    void showTrafficDensity(const DynamicArray<Ticket> &tickets, int topN = 5)
     {
-        Analytics::trafficDensityPrediction(stations, tickets, [this](int id)
-                                            { return getStationNameById(id); }, topN);
+        Analytics::trafficDensityPrediction(stations, tickets, getStationNameByIdStatic, topN);
     }
 
     // Detect cycle in network
@@ -281,6 +270,19 @@ public:
     {
         return graph.detectCycle();
     }
+
+    // Static helper for function pointer (workaround for no lambdas)
+    static RouteManager *instance;
+    static string getStationNameByIdStatic(int id)
+    {
+        if (instance)
+            return instance->getStationNameById(id);
+        return "ID " + to_string(id);
+    }
+    void setInstance() { instance = this; }
 };
+
+// Static member definition
+RouteManager *RouteManager::instance = nullptr;
 
 #endif

@@ -2,7 +2,7 @@
 #define VEHICLE_MANAGER_H
 
 #include <iostream>
-#include <vector>
+#include "../ds/array.h"
 #include "../ds/hashtable.h"
 #include "../models/vehicle.h"
 
@@ -11,7 +11,7 @@ using namespace std;
 class VehicleManager
 {
 private:
-    vector<Vehicle> vehicles;           // Vector for storing vehicles (ordered display)
+    DynamicArray<Vehicle> vehicles;     // DynamicArray for storing vehicles (ordered display)
     HashTable<int, Vehicle> vehicleMap; // O(1) lookup: ID -> Vehicle
 
 public:
@@ -59,17 +59,15 @@ public:
             return;
         }
 
-        // Remove from vector
-        auto it = vehicles.begin();
-        while (it != vehicles.end())
+        // Remove from array
+        for (int i = 0; i < vehicles.size(); i++)
         {
-            if (it->getID() == vehicleID)
+            if (vehicles[i].getID() == vehicleID)
             {
-                vehicles.erase(it);
+                vehicles.erase(i);
                 cout << "Vehicle removed: ID " << vehicleID << endl;
                 return;
             }
-            ++it;
         }
     }
 
@@ -82,9 +80,9 @@ public:
             return;
         }
         cout << "All Vehicles:" << endl;
-        for (const auto &v : vehicles)
+        for (int i = 0; i < vehicles.size(); i++)
         {
-            v.display();
+            vehicles[i].display();
         }
     }
 

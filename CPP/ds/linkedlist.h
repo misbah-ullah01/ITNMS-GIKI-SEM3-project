@@ -17,9 +17,9 @@ class LinkedList
 {
 public:
     ListNode<T> *head;
-    int size;
+    int count;
 
-    LinkedList() : head(nullptr), size(0) {}
+    LinkedList() : head(nullptr), count(0) {}
 
     ~LinkedList()
     {
@@ -43,7 +43,7 @@ public:
             }
             temp->next = newNode;
         }
-        size++;
+        count++;
     }
 
     // Insert at the front
@@ -52,7 +52,7 @@ public:
         ListNode<T> *newNode = new ListNode<T>(val);
         newNode->next = head;
         head = newNode;
-        size++;
+        count++;
     }
 
     // Remove a node by value
@@ -67,7 +67,7 @@ public:
             ListNode<T> *toDelete = head;
             head = head->next;
             delete toDelete;
-            size--;
+            count--;
             return true;
         }
 
@@ -82,7 +82,7 @@ public:
             ListNode<T> *toDelete = temp->next;
             temp->next = temp->next->next;
             delete toDelete;
-            size--;
+            count--;
             return true;
         }
 
@@ -104,7 +104,90 @@ public:
             head = head->next;
             delete temp;
         }
-        size = 0;
+        count = 0;
+    }
+
+    // New helpers for compatibility
+    int size() const { return count; }
+
+    void push_back(const T &val) { insertEnd(val); }
+
+    // Get element at index (0-based)
+    T &get(int index)
+    {
+        if (index < 0)
+        {
+            cerr << "Error: Index out of bounds" << endl;
+            static T defaultVal;
+            return defaultVal;
+        }
+        ListNode<T> *temp = head;
+        int i = 0;
+        while (temp && i < index)
+        {
+            temp = temp->next;
+            i++;
+        }
+        if (!temp)
+        {
+            cerr << "Error: Index out of bounds" << endl;
+            static T defaultVal;
+            return defaultVal;
+        }
+        return temp->data;
+    }
+
+    const T &get(int index) const
+    {
+        if (index < 0)
+        {
+            cerr << "Error: Index out of bounds" << endl;
+            static T defaultVal;
+            return defaultVal;
+        }
+        ListNode<T> *temp = head;
+        int i = 0;
+        while (temp && i < index)
+        {
+            temp = temp->next;
+            i++;
+        }
+        if (!temp)
+        {
+            cerr << "Error: Index out of bounds" << endl;
+            static T defaultVal;
+            return defaultVal;
+        }
+        return temp->data;
+    }
+
+    // Remove element at index
+    bool removeAt(int index)
+    {
+        if (index < 0 || !head)
+            return false;
+        if (index == 0)
+        {
+            ListNode<T> *toDelete = head;
+            head = head->next;
+            delete toDelete;
+            count--;
+            return true;
+        }
+        int i = 0;
+        ListNode<T> *prev = head;
+        while (prev->next && i < index - 1)
+        {
+            prev = prev->next;
+            i++;
+        }
+        if (!prev->next)
+            return false;
+        ListNode<T> *toDelete = prev->next;
+        prev->next = prev->next->next;
+        delete toDelete;
+        count--;
+        return true;
     }
 
     // Display list

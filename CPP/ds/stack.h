@@ -15,29 +15,47 @@ public:
         list.insertFront(val);
     }
 
+    // Pop and return
     T pop()
     {
         if (!list.head)
-            throw runtime_error("Stack Empty");
+        {
+            cerr << "Error: Stack Empty" << endl;
+            static T defaultVal;
+            return defaultVal;
+        }
         T val = list.head->data;
         ListNode<T> *temp = list.head;
         list.head = list.head->next;
         delete temp;
-        list.size--;
+        list.count--;
         return val;
     }
 
-    T peek()
+    T peek() const
     {
         if (!list.head)
-            throw runtime_error("Stack Empty");
+        {
+            cerr << "Error: Stack Empty" << endl;
+            static T defaultVal;
+            return defaultVal;
+        }
         return list.head->data;
     }
 
-    bool isEmpty()
+    bool isEmpty() const
     {
         return list.head == nullptr;
     }
+
+    // STL-style aliases
+    void popVoid()
+    {
+        (void)pop();
+    }
+
+    T top() const { return peek(); }
+    bool empty() const { return isEmpty(); }
 
     void display()
     {

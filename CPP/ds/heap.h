@@ -89,7 +89,11 @@ public:
     T extractMin()
     {
         if (size <= 0)
-            throw runtime_error("Heap is empty");
+        {
+            cerr << "Error: Heap is empty" << endl;
+            static T defaultVal;
+            return defaultVal;
+        }
 
         T root = heap[0];
         heap[0] = heap[size - 1];
@@ -102,7 +106,11 @@ public:
     T getMin()
     {
         if (size <= 0)
-            throw runtime_error("Heap is empty");
+        {
+            cerr << "Error: Heap is empty" << endl;
+            static T defaultVal;
+            return defaultVal;
+        }
         return heap[0];
     }
 

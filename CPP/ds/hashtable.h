@@ -2,57 +2,72 @@
 #define HASHTABLES_H
 
 #include <iostream>
-#include <list>
-#include <vector>
+#include "linkedlist.h"
+#include "array.h"
+#include "pair.h"
 using namespace std;
 
-// Template Hash Table with chaining
+// Template Hash Table with chaining using custom DS
 template <typename K, typename V>
 class HashTable
 {
 private:
-    vector<list<pair<K, V>>> table; // vector of lists for chaining
-    int capacity;                   // total buckets
+    DynamicArray<LinkedList<Pair<K, V>>> table; // array of linked lists for chaining
+    int capacity;                               // total buckets
 
-    // Simple hash function
-    int hashFunc(K key) const
+    // Simple hash function for int keys
+    int hashFunc(int key) const
     {
-        return hash<K>()(key) % capacity;
+        return key % capacity;
+    }
+
+    // Hash for other types (string, etc.) - simple sum-based
+    int hashFunc(const string &key) const
+    {
+        int sum = 0;
+        for (int i = 0; i < (int)key.size(); i++)
+            sum += (int)key[i];
+        return sum % capacity;
     }
 
 public:
     // Constructor
-    HashTable(int size = 10)
+    HashTable(int size = 10) : table(size), capacity(size)
     {
-        capacity = size;
-        table.resize(capacity);
+        // Initialize each bucket with an empty LinkedList
+        for (int i = 0; i < capacity; i++)
+        {
+            table.push_back(LinkedList<Pair<K, V>>());
+        }
     }
 
     // Insert key-value pair
     void insert(K key, V value)
     {
         int index = hashFunc(key);
+        LinkedList<Pair<K, V>> &bucket = table[index];
         // Check if key already exists
-        for (auto &p : table[index])
+        for (int i = 0; i < bucket.size(); i++)
         {
-            if (p.first == key)
+            if (bucket.get(i).first == key)
             {
-                p.second = value; // update value
+                bucket.get(i).second = value; // update value
                 return;
             }
         }
-        table[index].push_back({key, value});
+        bucket.push_back(Pair<K, V>(key, value));
     }
 
     // Search by key
     bool search(K key, V &value) const
     {
         int index = hashFunc(key);
-        for (const auto &p : table[index])
+        const LinkedList<Pair<K, V>> &bucket = table[index];
+        for (int i = 0; i < bucket.size(); i++)
         {
-            if (p.first == key)
+            if (bucket.get(i).first == key)
             {
-                value = p.second;
+                value = bucket.get(i).second;
                 return true;
             }
         }
@@ -63,9 +78,10 @@ public:
     bool contains(K key) const
     {
         int index = hashFunc(key);
-        for (const auto &p : table[index])
+        const LinkedList<Pair<K, V>> &bucket = table[index];
+        for (int i = 0; i < bucket.size(); i++)
         {
-            if (p.first == key)
+            if (bucket.get(i).first == key)
             {
                 return true;
             }
@@ -77,11 +93,12 @@ public:
     bool remove(K key)
     {
         int index = hashFunc(key);
-        for (auto it = table[index].begin(); it != table[index].end(); ++it)
+        LinkedList<Pair<K, V>> &bucket = table[index];
+        for (int i = 0; i < bucket.size(); i++)
         {
-            if (it->first == key)
+            if (bucket.get(i).first == key)
             {
-                table[index].erase(it);
+                bucket.removeAt(i);
                 return true;
             }
         }
@@ -94,11 +111,12 @@ public:
         for (int i = 0; i < capacity; i++)
         {
             cout << "Bucket " << i << ": ";
-            for (auto &p : table[i])
+            LinkedList<Pair<K, V>> &bucket = table[i];
+            for (int j = 0; j < bucket.size(); j++)
             {
-                cout << "(" << p.first << "," << p.second << ") ";
+                cout << "(" << bucket.get(j).first << "," << bucket.get(j).second << ") ";
             }
-            cout << "\n";
+            cout << "\\n";
         }
     }
 };

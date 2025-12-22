@@ -2,7 +2,6 @@
 #define STATION_H
 
 #include <iostream>
-#include <string>
 using namespace std;
 
 class Station
@@ -14,6 +13,7 @@ private:
     int passengersCount; // Optional: number of passengers currently
 
 public:
+    Station() : stationID(0), name(""), location(""), passengersCount(0) {}
     // Constructor
     Station(int _id, string _name, string _location = "")
         : stationID(_id), name(_name), location(_location), passengersCount(0) {}

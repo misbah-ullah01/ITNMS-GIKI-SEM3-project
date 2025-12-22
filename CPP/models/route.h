@@ -2,7 +2,6 @@
 #define ROUTE_H
 
 #include <iostream>
-#include <string>
 using namespace std;
 
 class Route
@@ -14,6 +13,7 @@ private:
     double distance;    // Distance between stations (km)
 
 public:
+    Route() : routeID(0), startStationID(0), endStationID(0), distance(0.0) {}
     // Constructor
     Route(int _routeID, int _start, int _end, double _distance)
         : routeID(_routeID), startStationID(_start), endStationID(_end), distance(_distance) {}

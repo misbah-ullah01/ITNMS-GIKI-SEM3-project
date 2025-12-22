@@ -21,32 +21,55 @@ public:
     }
 
     // Add element to the end (enqueue)
-    void enqueue(T val)
+    void enqueue(const T &val)
     {
         list.insertEnd(val);
     }
+
+    // STL-style aliases
+    void push(const T &val) { enqueue(val); }
 
     // Remove element from the front (dequeue)
     T dequeue()
     {
         if (isEmpty())
         {
-            throw runtime_error("Queue is empty");
+            cerr << "Error: Queue is empty" << endl;
+            static T defaultVal;
+            return defaultVal;
         }
 
         T frontVal = list.head->data;
-        list.remove(frontVal); // remove the first element
+        // remove first node directly
+        ListNode<T> *tmp = list.head;
+        list.head = list.head->next;
+        delete tmp;
+        list.count--;
         return frontVal;
     }
 
+    // STL-style alias: pop returns void like std::queue
+    void pop()
+    {
+        (void)dequeue();
+    }
+
     // Peek front element without removing
-    T front()
+    T front() const
     {
         if (isEmpty())
-            throw runtime_error("Queue is empty");
+        {
+            cerr << "Error: Queue is empty" << endl;
+            static T defaultVal;
+            return defaultVal;
+        }
 
         return list.head->data;
     }
+
+    bool empty() const { return isEmpty(); }
+
+    int size() const { return list.size(); }
 
     // Display the queue
     void display() const

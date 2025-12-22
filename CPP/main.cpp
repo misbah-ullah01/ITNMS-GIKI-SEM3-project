@@ -43,6 +43,7 @@ int main()
 
     // System Managers
     RouteManager routeManager;
+    routeManager.setInstance(); // Set static instance for function pointer callbacks
     TicketManager ticketManager;
     VehicleManager vehicleManager;
     HistoryManager historyManager;
@@ -479,8 +480,7 @@ void displayPassengerMenu(TicketManager &ticketManager, RouteManager &routeManag
             break;
         case 4:
             cout << "\n";
-            ticketManager.displayAllTicketsWithNames([&routeManager](int id)
-                                                     { return routeManager.getStationNameById(id); });
+            ticketManager.displayAllTicketsWithNames(RouteManager::getStationNameByIdStatic);
             break;
         case 5:
             passengerMenuActive = false;
@@ -538,8 +538,7 @@ void displayViewMenu(RouteManager &routeManager, TicketManager &ticketManager, V
             break;
         case 4:
             cout << "\n";
-            ticketManager.displayAllTicketsWithNames([&routeManager](int id)
-                                                     { return routeManager.getStationNameById(id); });
+            ticketManager.displayAllTicketsWithNames(RouteManager::getStationNameByIdStatic);
             break;
         case 5:
             cout << "\n";
@@ -730,7 +729,7 @@ void displayHistoryMenu(HistoryManager &historyManager, RouteManager &routeManag
             //            ADD_ROUTE:id:start:end:distance
             //            ADD_VEHICLE:id:name:capacity
             size_t pos = 0;
-            vector<string> parts;
+            DynamicArray<string> parts;
             string token;
             string temp = last;
             while ((pos = temp.find(':')) != string::npos)
