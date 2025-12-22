@@ -21,6 +21,33 @@ public:
 
     LinkedList() : head(nullptr), count(0) {}
 
+    // Copy constructor (deep copy)
+    LinkedList(const LinkedList<T> &other) : head(nullptr), count(0)
+    {
+        ListNode<T> *temp = other.head;
+        while (temp)
+        {
+            insertEnd(temp->data);
+            temp = temp->next;
+        }
+    }
+
+    // Copy assignment operator (deep copy)
+    LinkedList<T> &operator=(const LinkedList<T> &other)
+    {
+        if (this != &other)
+        {
+            clear();
+            ListNode<T> *temp = other.head;
+            while (temp)
+            {
+                insertEnd(temp->data);
+                temp = temp->next;
+            }
+        }
+        return *this;
+    }
+
     ~LinkedList()
     {
         clear();
