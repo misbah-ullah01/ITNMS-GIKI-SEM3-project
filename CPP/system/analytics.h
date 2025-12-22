@@ -172,7 +172,7 @@ public:
         }
 
         // Sort by activity (simple selection sort for top N)
-        cout << "Top " << topN << " stations by predicted traffic density:\\n";
+        cout << "Top " << topN << " stations by predicted traffic density:\n";
         DynamicArray<bool> used(stations.size());
         for (int i = 0; i < stations.size(); i++)
             used.push_back(false);
@@ -188,7 +188,7 @@ public:
             if (maxIdx == -1)
                 break;
             used[maxIdx] = true;
-            cout << n + 1 << ". " << getStationName(stationIDs[maxIdx]) << " (ID: " << stationIDs[maxIdx] << ") - Activity: " << activity[maxIdx] << "\\n";
+            cout << n + 1 << ". " << getStationName(stationIDs[maxIdx]) << " (ID: " << stationIDs[maxIdx] << ") - Activity: " << activity[maxIdx] << "\n";
         }
     }
 
@@ -246,10 +246,10 @@ public:
             }
         }
 
-        cout << "Daily Usage Trends (date -> tickets):\\n";
+        cout << "Daily Usage Trends (date -> tickets):\n";
         for (int i = 0; i < dates.size(); i++)
         {
-            cout << dates[i] << " -> " << counts[i] << "\\n";
+            cout << dates[i] << " -> " << counts[i] << "\n";
         }
     }
 
@@ -320,9 +320,9 @@ public:
         }
 
         // Display result
-        cout << "\\n===== MOST CROWDED STATION =====\\n";
-        cout << "Station: " << getStationName(busiestStationID) << " (ID: " << busiestStationID << ")\\n";
-        cout << "Total Activity: " << maxActivity << " (departures + arrivals)\\n";
+        cout << "\n===== MOST CROWDED STATION =====\n";
+        cout << "Station: " << getStationName(busiestStationID) << " (ID: " << busiestStationID << ")\n";
+        cout << "Total Activity: " << maxActivity << " (departures + arrivals)\n";
 
         // Breakdown
         int departures = 0, arrivals = 0;
@@ -333,9 +333,9 @@ public:
             if (tickets[i].getEndStationID() == busiestStationID)
                 arrivals++;
         }
-        cout << "  - Departures: " << departures << "\\n";
-        cout << "  - Arrivals: " << arrivals << "\\n";
-        cout << "================================\\n"
+        cout << "  - Departures: " << departures << "\n";
+        cout << "  - Arrivals: " << arrivals << "\n";
+        cout << "================================\n"
              << endl;
     }
 };

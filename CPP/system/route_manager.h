@@ -238,27 +238,35 @@ public:
     // BFS from a starting station
     void BFS(int startID)
     {
-        cout << "BFS starting from Station ID " << startID << ":" << endl;
+        graph.setLabelProvider(getStationNameByIdStatic);
+        string startName = getStationNameById(startID);
+        cout << "BFS starting from " << startName << ":" << endl;
         graph.BFS(startID);
     }
 
     // DFS from a starting station
     void DFS(int startID)
     {
-        cout << "DFS starting from Station ID " << startID << ":" << endl;
+        graph.setLabelProvider(getStationNameByIdStatic);
+        string startName = getStationNameById(startID);
+        cout << "DFS starting from " << startName << ":" << endl;
         graph.DFS(startID);
     }
 
     // Shortest path using Dijkstra
     void shortestPath(int startID, int endID)
     {
-        cout << "Shortest path from " << startID << " to " << endID << ":" << endl;
+        graph.setLabelProvider(getStationNameByIdStatic);
+        string startName = getStationNameById(startID);
+        string endName = getStationNameById(endID);
+        cout << "Shortest path from " << startName << " to " << endName << ":" << endl;
         graph.Dijkstra(startID, endID);
     }
 
     // Minimum Spanning Tree
     void minimumSpanningTree()
     {
+        graph.setLabelProvider(getStationNameByIdStatic);
         cout << "Minimum Spanning Tree:" << endl;
         graph.MST();
     }

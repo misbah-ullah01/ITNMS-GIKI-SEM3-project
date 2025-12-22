@@ -116,7 +116,7 @@ public:
             {
                 cout << "(" << bucket.get(j).first << "," << bucket.get(j).second << ") ";
             }
-            cout << "\\n";
+            cout << "\n";
         }
     }
 };

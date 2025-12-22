@@ -75,7 +75,7 @@ public:
         int j = getIndex(v);
         if (i == -1 || j == -1)
         {
-            cout << "Node not found!\\n";
+            cout << "Node not found!\n";
             return;
         }
         adj[i].push_back(Pair<int, int>(j, weight));
@@ -93,7 +93,7 @@ public:
                 Pair<int, int> &p = adj[i][k];
                 cout << "(" << nodeLabelByIndex(p.first) << "," << p.second << ") ";
             }
-            cout << "\\n";
+            cout << "\n";
         }
     }
 
@@ -128,7 +128,7 @@ public:
                 }
             }
         }
-        cout << "\\n";
+        cout << "\n";
     }
 
     // DFS from start node
@@ -162,7 +162,7 @@ public:
                     st.push(v);
             }
         }
-        cout << "\\n";
+        cout << "\n";
     }
 
     // Dijkstra: shortest path from start node
@@ -215,7 +215,7 @@ public:
 
         // Print path from start to end
         int e = getIndex(end);
-        cout << "Shortest distance: " << dist[e] << "\\n";
+        cout << "Shortest distance: " << dist[e] << "\n";
         cout << "Path: ";
         DynamicArray<int> path;
         int curr = e;
@@ -226,7 +226,7 @@ public:
         }
         for (int i = path.size() - 1; i >= 0; i--)
             cout << nodeLabelByIndex(path[i]) << " ";
-        cout << "\\n";
+        cout << "\n";
     }
 
     // Detect cycle in undirected graph using DFS
@@ -297,7 +297,7 @@ public:
             }
         }
 
-        cout << "MST Edges:\\n";
+        cout << "MST Edges:\n";
         for (int i = 1; i < V; i++)
         {
             for (int j = 0; j < V; j++)
@@ -307,14 +307,14 @@ public:
                     Pair<int, int> &p = adj[j][k];
                     if (p.first == i && inMST[j])
                     {
-                        cout << nodeLabelByIndex(j) << " - " << nodeLabelByIndex(i) << " : " << p.second << "\\n";
+                        cout << nodeLabelByIndex(j) << " - " << nodeLabelByIndex(i) << " : " << p.second << "\n";
                         mstWeight += p.second;
                         break;
                     }
                 }
             }
         }
-        cout << "Total MST Weight: " << mstWeight << "\\n";
+        cout << "Total MST Weight: " << mstWeight << "\n";
     }
 };
 
