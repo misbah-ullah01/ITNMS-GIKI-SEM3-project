@@ -86,10 +86,70 @@ public:
         }
     }
 
+    // Display vehicles sorted by capacity
+    void displayVehiclesSortedByCapacity(bool ascending = true)
+    {
+        if (vehicles.empty())
+        {
+            cout << "No vehicles available." << endl;
+            return;
+        }
+
+        // Create a copy and sort
+        DynamicArray<Vehicle> sorted;
+        for (int i = 0; i < vehicles.size(); i++)
+            sorted.push_back(vehicles[i]);
+
+        // Insertion sort
+        for (int i = 1; i < sorted.size(); i++)
+        {
+            Vehicle key = sorted[i];
+            int j = i - 1;
+            if (ascending)
+            {
+                while (j >= 0 && sorted[j] > key)
+                {
+                    sorted[j + 1] = sorted[j];
+                    j--;
+                }
+            }
+            else
+            {
+                while (j >= 0 && sorted[j] < key)
+                {
+                    sorted[j + 1] = sorted[j];
+                    j--;
+                }
+            }
+            sorted[j + 1] = key;
+        }
+
+        cout << "Vehicles (sorted by capacity - " << (ascending ? "smallest" : "largest") << " first):" << endl;
+        for (int i = 0; i < sorted.size(); i++)
+        {
+            sorted[i].display();
+        }
+    }
+
     // Get total number of vehicles
     int totalVehicles() const
     {
         return vehicles.size();
+    }
+
+    // Search vehicle by ID
+    void searchVehicleById(int vehicleID) const
+    {
+        for (int i = 0; i < vehicles.size(); i++)
+        {
+            if (vehicles[i].getID() == vehicleID)
+            {
+                cout << "Vehicle found!" << endl;
+                vehicles[i].display();
+                return;
+            }
+        }
+        cout << "Vehicle with ID " << vehicleID << " not found." << endl;
     }
 
     // Assign fastest vehicle (smallest capacity that fits requirement)

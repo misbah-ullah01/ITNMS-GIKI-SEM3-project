@@ -51,6 +51,17 @@ public:
     {
         return stationID == other.stationID;
     }
+
+    // Less than operator for sorting by passenger count (descending - higher count first)
+    bool operator>(const Station &other) const
+    {
+        return passengersCount > other.passengersCount;
+    }
+
+    bool operator<(const Station &other) const
+    {
+        return passengersCount < other.passengersCount;
+    }
 };
 
 #endif

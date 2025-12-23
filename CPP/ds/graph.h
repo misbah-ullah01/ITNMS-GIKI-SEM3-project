@@ -104,7 +104,7 @@ public:
         if (s == -1)
             return;
 
-        DynamicArray<bool> visited(V);
+        DynamicArray<bool> visited;
         for (int i = 0; i < V; i++)
             visited.push_back(false);
 
@@ -138,7 +138,7 @@ public:
         if (s == -1)
             return;
 
-        DynamicArray<bool> visited(V);
+        DynamicArray<bool> visited;
         for (int i = 0; i < V; i++)
             visited.push_back(false);
 
@@ -172,8 +172,8 @@ public:
         if (s == -1)
             return;
 
-        DynamicArray<int> dist(V);
-        DynamicArray<int> parent(V);
+        DynamicArray<int> dist;
+        DynamicArray<int> parent;
         for (int i = 0; i < V; i++)
         {
             dist.push_back(INT_MAX_VALUE);
@@ -182,7 +182,7 @@ public:
         dist[s] = 0;
 
         // Simple O(V^2) Dijkstra without priority queue
-        DynamicArray<bool> processed(V);
+        DynamicArray<bool> processed;
         for (int i = 0; i < V; i++)
             processed.push_back(false);
 
@@ -251,7 +251,7 @@ public:
 
     bool detectCycle()
     {
-        DynamicArray<bool> visited(V);
+        DynamicArray<bool> visited;
         for (int i = 0; i < V; i++)
             visited.push_back(false);
 
@@ -267,8 +267,8 @@ public:
     // Prim's MST
     void MST()
     {
-        DynamicArray<bool> inMST(V);
-        DynamicArray<int> key(V);
+        DynamicArray<bool> inMST;
+        DynamicArray<int> key;
         for (int i = 0; i < V; i++)
         {
             inMST.push_back(false);

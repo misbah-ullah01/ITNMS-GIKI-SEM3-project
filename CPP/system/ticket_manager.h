@@ -125,6 +125,30 @@ public:
     {
         return ticketsIssued;
     }
+
+    // Search ticket by ID
+    void searchTicketById(int ticketID, string (*getStationName)(int)) const
+    {
+        for (int i = 0; i < ticketsIssued.size(); i++)
+        {
+            if (ticketsIssued[i].getTicketID() == ticketID)
+            {
+                cout << "Ticket found!" << endl;
+                const Ticket &t = ticketsIssued[i];
+                if (t.getStartStationID() > 0 && t.getEndStationID() > 0)
+                {
+                    t.displayWithNames(getStationName(t.getStartStationID()),
+                                       getStationName(t.getEndStationID()));
+                }
+                else
+                {
+                    t.display();
+                }
+                return;
+            }
+        }
+        cout << "Ticket with ID " << ticketID << " not found." << endl;
+    }
 };
 
 #endif

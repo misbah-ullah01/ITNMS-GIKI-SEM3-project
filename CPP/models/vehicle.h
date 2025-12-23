@@ -39,6 +39,17 @@ public:
     {
         return vehicleID == other.vehicleID;
     }
+
+    // Less than operator for sorting by capacity
+    bool operator<(const Vehicle &other) const
+    {
+        return capacity < other.capacity;
+    }
+
+    bool operator>(const Vehicle &other) const
+    {
+        return capacity > other.capacity;
+    }
 };
 
 #endif

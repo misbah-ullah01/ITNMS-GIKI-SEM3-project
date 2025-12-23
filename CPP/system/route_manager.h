@@ -223,6 +223,101 @@ public:
         }
     }
 
+    // Display stations sorted by passenger count
+    void displayStationsSortedByPassengers(bool ascending = false) const
+    {
+        if (stations.size() == 0)
+        {
+            cout << "No stations available." << endl;
+            return;
+        }
+
+        // Create a copy and sort using quickSort
+        DynamicArray<Station> sorted;
+        for (int i = 0; i < stations.size(); i++)
+            sorted.push_back(stations[i]);
+
+        // Using insertion sort for simplicity with custom comparator
+        for (int i = 1; i < sorted.size(); i++)
+        {
+            Station key = sorted[i];
+            int j = i - 1;
+            if (ascending)
+            {
+                while (j >= 0 && sorted[j] > key)
+                {
+                    sorted[j + 1] = sorted[j];
+                    j--;
+                }
+            }
+            else
+            {
+                while (j >= 0 && sorted[j] < key) // descending order
+                {
+                    sorted[j + 1] = sorted[j];
+                    j--;
+                }
+            }
+            sorted[j + 1] = key;
+        }
+
+        cout << "Stations (sorted by passenger count - " << (ascending ? "lowest" : "highest") << " first):" << endl;
+        for (int i = 0; i < sorted.size(); i++)
+        {
+            sorted[i].display();
+        }
+    }
+
+    // Display routes sorted by distance
+    void displayRoutesSortedByDistance(bool ascending = true) const
+    {
+        if (routes.size() == 0)
+        {
+            cout << "No routes available." << endl;
+            return;
+        }
+
+        // Create a copy and sort
+        DynamicArray<Route> sorted;
+        for (int i = 0; i < routes.size(); i++)
+            sorted.push_back(routes[i]);
+
+        // Insertion sort
+        for (int i = 1; i < sorted.size(); i++)
+        {
+            Route key = sorted[i];
+            int j = i - 1;
+            if (ascending)
+            {
+                while (j >= 0 && sorted[j] > key)
+                {
+                    sorted[j + 1] = sorted[j];
+                    j--;
+                }
+            }
+            else
+            {
+                while (j >= 0 && sorted[j] < key)
+                {
+                    sorted[j + 1] = sorted[j];
+                    j--;
+                }
+            }
+            sorted[j + 1] = key;
+        }
+
+        cout << "Routes (sorted by distance - " << (ascending ? "shortest" : "longest") << " first):" << endl;
+        for (int i = 0; i < sorted.size(); i++)
+        {
+            string startName = getStationNameById(sorted[i].getStartStationID());
+            string endName = getStationNameById(sorted[i].getEndStationID());
+            cout << "Route ID: " << sorted[i].getRouteID()
+                 << ", From: " << startName
+                 << ", To: " << endName
+                 << ", Distance: " << sorted[i].getDistance() << " km" << endl;
+        }
+    }
+
     // Display all routes with station names
     void displayRoutes() const
     {
@@ -306,6 +401,31 @@ public:
     bool detectCycle()
     {
         return graph.detectCycle();
+    }
+
+    // Search for route between two stations
+    void searchRoute(int startID, int endID) const
+    {
+        bool found = false;
+        for (int i = 0; i < routes.size(); i++)
+        {
+            if ((routes[i].getStartStationID() == startID && routes[i].getEndStationID() == endID) ||
+                (routes[i].getStartStationID() == endID && routes[i].getEndStationID() == startID))
+            {
+                string startName = getStationNameById(routes[i].getStartStationID());
+                string endName = getStationNameById(routes[i].getEndStationID());
+                cout << "Route found!" << endl;
+                cout << "Route ID: " << routes[i].getRouteID()
+                     << ", From: " << startName
+                     << ", To: " << endName
+                     << ", Distance: " << routes[i].getDistance() << " km" << endl;
+                found = true;
+            }
+        }
+        if (!found)
+        {
+            cout << "No direct route found between these stations." << endl;
+        }
     }
 
     // Static helper for function pointer (workaround for no lambdas)

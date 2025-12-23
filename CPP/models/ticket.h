@@ -57,6 +57,17 @@ public:
     {
         return ticketID == other.ticketID;
     }
+
+    // Less than operator for sorting by ticket ID
+    bool operator<(const Ticket &other) const
+    {
+        return ticketID < other.ticketID;
+    }
+
+    bool operator>(const Ticket &other) const
+    {
+        return ticketID > other.ticketID;
+    }
 };
 
 #endif

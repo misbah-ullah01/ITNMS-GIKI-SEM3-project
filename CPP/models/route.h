@@ -41,6 +41,17 @@ public:
     {
         return routeID == other.routeID;
     }
+
+    // Less than operator for sorting by distance
+    bool operator<(const Route &other) const
+    {
+        return distance < other.distance;
+    }
+
+    bool operator>(const Route &other) const
+    {
+        return distance > other.distance;
+    }
 };
 
 #endif

@@ -45,6 +45,35 @@ public:
         delete[] data;
     }
 
+    // Copy constructor (deep copy)
+    DynamicArray(const DynamicArray &other)
+    {
+        capacity = other.capacity;
+        count = other.count;
+        data = new T[capacity];
+        for (int i = 0; i < count; i++)
+        {
+            data[i] = other.data[i];
+        }
+    }
+
+    // Copy assignment operator (deep copy)
+    DynamicArray &operator=(const DynamicArray &other)
+    {
+        if (this != &other)
+        {
+            delete[] data;
+            capacity = other.capacity;
+            count = other.count;
+            data = new T[capacity];
+            for (int i = 0; i < count; i++)
+            {
+                data[i] = other.data[i];
+            }
+        }
+        return *this;
+    }
+
     // Add element at end
     void add(const T &element)
     {
